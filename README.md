@@ -13,6 +13,11 @@ $ go mod init todo
 $ go get -u github.com/gin-gonic/gin
 ```
 
+* run example
+```
+$ go run example.go
+```
+
 * sample request
 ```
 $ curl -v localhost:8080/ping

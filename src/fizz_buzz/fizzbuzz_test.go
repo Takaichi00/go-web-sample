@@ -1,0 +1,13 @@
+package fizzbuzz_test
+
+import (
+	"testing"
+	fizzbuzz "todo/src/fizz_buzz"
+)
+
+func TestFizzBuzz(t *testing.T) {
+	got := fizzbuzz.FizzBuzz(1)
+	if got != "1" {
+		t.Errorf(`FizzBuzz(1) is %q`, got)
+	}
+}
