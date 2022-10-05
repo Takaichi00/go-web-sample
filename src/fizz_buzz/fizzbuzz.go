@@ -1,5 +1,5 @@
 package fizzbuzz
 
-func FizzBuzz(n int) string {
+func Convert(n int) string {
 	return "1"
 }

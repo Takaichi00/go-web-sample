@@ -6,7 +6,7 @@ import (
 )
 
 func TestFizzBuzz(t *testing.T) {
-	got := fizzbuzz.FizzBuzz(1)
+	got := fizzbuzz.Convert(1)
 	if got != "1" {
 		t.Errorf(`FizzBuzz(1) is %q`, got)
 	}
