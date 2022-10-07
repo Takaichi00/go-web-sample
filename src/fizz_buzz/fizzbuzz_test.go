@@ -15,6 +15,7 @@ func TestFizzBuzz(t *testing.T) {
 		{n: 2, want: "2"},
 		{n: 3, want: "Fizz"},
 		{n: 5, want: "Buzz"},
+		{n: 15, want: "FizzBuzz"},
 	}
 
 	for _, tt := range tests {
@@ -24,23 +25,9 @@ func TestFizzBuzz(t *testing.T) {
 		}
 	}
 
-	got := fizzbuzz.Convert(1)
-	if got != "1" {
-		t.Errorf(`FizzBuzz(1) is %q`, got)
-	}
-
-	got = fizzbuzz.Convert(2)
-	if got != "2" {
-		t.Errorf(`FizzBuzz(1) is %q`, got)
-	}
-
-	got = fizzbuzz.Convert(3)
-	if got != "Fizz" {
-		t.Errorf(`FizzBuzz(1) is %q`, got)
-	}
-
-	got = fizzbuzz.Convert(5)
-	if got != "Buzz" {
-		t.Errorf(`FizzBuzz(1) is %q`, got)
-	}
+	//got := fizzbuzz.Convert(1)
+	//if got != "1" {
+	//	t.Errorf(`FizzBuzz(1) is %q`, got)
+	//}
+	//
 }
