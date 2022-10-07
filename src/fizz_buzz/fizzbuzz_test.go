@@ -26,10 +26,11 @@ func TestFizzBuzz(t *testing.T) {
 		// execute sub test
 		t.Run(name, func(t *testing.T) {
 			t.Parallel() // execute parallel
-			got := fizzbuzz.Convert(tt.n)
-			if got != tt.want {
-				t.Errorf(`Convert(%v) = %q but want %q`, tt.n, got, tt.want)
-			}
+			testFizzBuzz(t, tt.n, tt.want)
+			//got := fizzbuzz.Convert(tt.n)
+			//if got != tt.want {
+			//	t.Errorf(`Convert(%v) = %q but want %q`, tt.n, got, tt.want)
+			//}
 		})
 
 		//got := fizzbuzz.Convert(tt.n)
@@ -43,4 +44,12 @@ func TestFizzBuzz(t *testing.T) {
 	//	t.Errorf(`FizzBuzz(1) is %q`, got)
 	//}
 	//
+}
+
+func testFizzBuzz(t *testing.T, n int, want string) {
+	t.Helper()
+	got := fizzbuzz.Convert(n)
+	if got != want {
+		t.Errorf(`Convert(%v) = %q but want %q`, n, got, want)
+	}
 }
