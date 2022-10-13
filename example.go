@@ -22,7 +22,6 @@ func main() {
 		c.JSON(http.StatusOK, gin.H{
 			"result": result,
 		})
-
 	})
 
 	r.Run() // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
