@@ -13,6 +13,7 @@ func TestCard(t *testing.T) {
 		want string
 	}{
 		{suit: "♠", rank: "3", want: "3♠"},
+		{suit: "♥", rank: "J", want: "J♥"},
 	}
 
 	for _, tt := range tests {
@@ -22,7 +23,7 @@ func TestCard(t *testing.T) {
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
 			card := Card{Suit: tt.suit, Rank: tt.rank}
-			if card.Notation() != "3♠" {
+			if card.Notation() != tt.want {
 				t.Errorf(`Card(1) is %q`, card)
 			}
 		})

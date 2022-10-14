@@ -6,5 +6,5 @@ type Card struct {
 }
 
 func (p *Card) Notation() string {
-	return "3♠"
+	return p.Rank + p.Suit
 }
