@@ -8,3 +8,7 @@ type Card struct {
 func (p *Card) Notation() string {
 	return p.Rank + p.Suit
 }
+
+func (p *Card) hasSameSuit(card Card) bool {
+	return p.Suit == card.Suit
+}
