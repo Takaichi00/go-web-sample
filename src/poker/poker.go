@@ -12,3 +12,7 @@ func (p *Card) Notation() string {
 func (p *Card) hasSameSuit(card Card) bool {
 	return p.Suit == card.Suit
 }
+
+func (p *Card) hasSameRank(card Card) bool {
+	return p.Rank == card.Rank
+}
