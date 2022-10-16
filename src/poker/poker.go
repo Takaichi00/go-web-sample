@@ -16,3 +16,11 @@ func (p *Card) hasSameSuit(card Card) bool {
 func (p *Card) hasSameRank(card Card) bool {
 	return p.Rank == card.Rank
 }
+
+type Cards struct {
+	Cards []Card
+}
+
+func (p *Cards) isPair() bool {
+	return false
+}
