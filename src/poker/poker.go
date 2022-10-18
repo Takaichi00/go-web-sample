@@ -22,5 +22,12 @@ type Cards struct {
 }
 
 func (p *Cards) isPair() bool {
+	for i := 0; i < len(p.Cards)-1; i++ {
+		for j := i + 1; j < len(p.Cards); j++ {
+			if p.Cards[i].hasSameRank(p.Cards[j]) {
+				return true
+			}
+		}
+	}
 	return false
 }
