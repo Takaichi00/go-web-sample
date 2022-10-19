@@ -91,14 +91,13 @@ func Test_カードが同じrankを持つか判定できる(t *testing.T) {
 func Test_ツーカードポーカーのpairの役を判定できる(t *testing.T) {
 
 	tests := []struct {
-		suit1 string
-		rank1 string
-		suit2 string
-		rank2 string
+		cards []Card
 		want  bool
 	}{
-		{suit1: "♥", rank1: "A", suit2: "♠", rank2: "A", want: true},
-		{suit1: "♥", rank1: "A", suit2: "♠", rank2: "2", want: false},
+		{cards: []Card{Card{"♥", "A"}, Card{"♥", "J"}}, want: false},
+		{cards: []Card{Card{"♥", "A"}, Card{"♠", "A"}}, want: true},
+		{cards: []Card{Card{"♥", "A"}, Card{"♠", "2"}, Card{"♠", "3"}, Card{"♥", "4"}}, want: false},
+		{cards: []Card{Card{"♥", "A"}, Card{"♠", "2"}, Card{"♠", "3"}, Card{"♥", "2"}}, want: true},
 	}
 
 	for _, tt := range tests {
@@ -107,9 +106,8 @@ func Test_ツーカードポーカーのpairの役を判定できる(t *testing.
 
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
-			card1 := Card{Suit: tt.suit1, Rank: tt.rank1}
-			card2 := Card{Suit: tt.suit2, Rank: tt.rank2}
-			cards := Cards{Cards: []Card{card1, card2}}
+
+			cards := Cards{Cards: tt.cards}
 
 			if cards.isPair() != tt.want {
 				t.Errorf(`Cards is %q, want: %t, actual: %t`, cards, tt.want, cards.isPair())
