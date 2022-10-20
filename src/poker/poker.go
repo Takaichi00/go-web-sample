@@ -31,3 +31,14 @@ func (p *Cards) isPair() bool {
 	}
 	return false
 }
+
+func (p *Cards) isFlush() bool {
+	for i := 0; i < len(p.Cards)-1; i++ {
+		for j := i + 1; j < len(p.Cards); j++ {
+			if p.Cards[i].hasSameSuit(p.Cards[j]) {
+				return true
+			}
+		}
+	}
+	return false
+}
