@@ -21,24 +21,27 @@ type Cards struct {
 	Cards []Card
 }
 
-func (p *Cards) isPair() bool {
+// refer to: https://zenn.dev/kyoh86/articles/qiita-18b8bfc6ffe045aaf380
+
+type Hand string
+
+const (
+	Pair     = Hand("Pair")
+	Flush    = Hand("Flush")
+	HighCard = Hand("High Card")
+)
+
+func (p *Cards) hand() Hand {
+
 	for i := 0; i < len(p.Cards)-1; i++ {
 		for j := i + 1; j < len(p.Cards); j++ {
 			if p.Cards[i].hasSameRank(p.Cards[j]) {
-				return true
+				return Pair
 			}
-		}
-	}
-	return false
-}
-
-func (p *Cards) isFlush() bool {
-	for i := 0; i < len(p.Cards)-1; i++ {
-		for j := i + 1; j < len(p.Cards); j++ {
 			if p.Cards[i].hasSameSuit(p.Cards[j]) {
-				return true
+				return Flush
 			}
 		}
 	}
-	return false
+	return HighCard
 }

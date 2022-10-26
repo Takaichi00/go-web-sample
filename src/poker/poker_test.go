@@ -88,14 +88,14 @@ func Test_カードが同じrankを持つか判定できる(t *testing.T) {
 	}
 }
 
-func Test_ツーカードポーカーのpairの役を判定できる(t *testing.T) {
-
+func Test_ツーカードポーカーの役を判定できる(t *testing.T) {
 	tests := []struct {
 		cards []Card
-		want  bool
+		want  Hand
 	}{
-		{cards: []Card{Card{"♥", "A"}, Card{"♥", "J"}}, want: false},
-		{cards: []Card{Card{"♥", "A"}, Card{"♠", "A"}}, want: true},
+		{cards: []Card{Card{"♥", "A"}, Card{"♥", "J"}}, want: Flush},
+		{cards: []Card{Card{"♥", "A"}, Card{"♠", "A"}}, want: Pair},
+		{cards: []Card{Card{"♥", "A"}, Card{"♠", "J"}}, want: HighCard},
 	}
 
 	for _, tt := range tests {
@@ -107,33 +107,8 @@ func Test_ツーカードポーカーのpairの役を判定できる(t *testing.
 
 			cards := Cards{Cards: tt.cards}
 
-			if cards.isPair() != tt.want {
-				t.Errorf(`Cards is %q, want: %t, actual: %t`, cards, tt.want, cards.isPair())
-			}
-		})
-	}
-}
-
-func Test_ツーカードポーカーのflushの役を判定できる(t *testing.T) {
-	tests := []struct {
-		cards []Card
-		want  bool
-	}{
-		{cards: []Card{Card{"♥", "A"}, Card{"♥", "J"}}, want: true},
-		{cards: []Card{Card{"♥", "A"}, Card{"♠", "A"}}, want: false},
-	}
-
-	for _, tt := range tests {
-		tt := tt
-		name := fmt.Sprintf("want:%v", tt.want)
-
-		t.Run(name, func(t *testing.T) {
-			t.Parallel()
-
-			cards := Cards{Cards: tt.cards}
-
-			if cards.isFlush() != tt.want {
-				t.Errorf(`Cards is %q, want: %t, actual: %t`, cards, tt.want, cards.isPair())
+			if cards.hand() != tt.want {
+				t.Errorf(`Cards is %q, want: %q, actual: %q`, cards, tt.want, cards.hand())
 			}
 		})
 	}
