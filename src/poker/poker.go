@@ -5,6 +5,8 @@ type Card struct {
 	Rank string
 }
 
+// TODO Rank を内部的には数字で持ち、不正な値だった場合はエラーを返す
+
 func (p *Card) Notation() string {
 	return p.Rank + p.Suit
 }
@@ -29,6 +31,7 @@ const (
 	Pair     = Hand("Pair")
 	Flush    = Hand("Flush")
 	HighCard = Hand("High Card")
+	Straight = Hand("Straight")
 )
 
 func (p *Cards) hand() Hand {
