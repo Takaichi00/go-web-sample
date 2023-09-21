@@ -35,16 +35,11 @@ const (
 )
 
 func (p *Cards) hand() Hand {
-
-	for i := 0; i < len(p.Cards)-1; i++ {
-		for j := i + 1; j < len(p.Cards); j++ {
-			if p.Cards[i].hasSameRank(p.Cards[j]) {
-				return Pair
-			}
-			if p.Cards[i].hasSameSuit(p.Cards[j]) {
-				return Flush
-			}
-		}
+	if p.Cards[0].hasSameRank(p.Cards[1]) {
+		return Pair
+	}
+	if p.Cards[0].hasSameSuit(p.Cards[1]) {
+		return Flush
 	}
 	return HighCard
 }

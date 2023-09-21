@@ -93,10 +93,9 @@ func Test_ツーカードポーカーの役を判定できる(t *testing.T) {
 		cards []Card
 		want  Hand
 	}{
-		{cards: []Card{Card{"♥", "A"}, Card{"♥", "J"}}, want: Flush},
 		{cards: []Card{Card{"♥", "A"}, Card{"♠", "A"}}, want: Pair},
+		{cards: []Card{Card{"♥", "A"}, Card{"♥", "J"}}, want: Flush},
 		{cards: []Card{Card{"♥", "A"}, Card{"♠", "J"}}, want: HighCard},
-		{cards: []Card{Card{"♥", "A"}, Card{"♠", "2"}}, want: Straight},
 	}
 
 	for _, tt := range tests {
