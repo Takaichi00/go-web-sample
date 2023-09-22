@@ -1,22 +1,45 @@
 package poker
 
+import "strconv"
+
 type Card struct {
-	Suit string
-	Rank string
+	suit string
+	rank Rank
 }
 
-// TODO Rank を内部的には数字で持ち、不正な値だった場合はエラーを返す
+type Rank struct {
+	number  int
+	display string
+}
+
+func ofRank(rankString string) Rank {
+	var i int
+	if rankString == "A" {
+		i = 1
+	} else if rankString == "J" {
+		i = 11
+	} else if rankString == "Q" {
+		i = 12
+	} else if rankString == "K" {
+		i = 13
+	} else {
+		i, _ = strconv.Atoi(rankString)
+	}
+	return Rank{number: i, display: rankString}
+}
+
+// TODO rank を内部的には数字で持ち、不正な値だった場合はエラーを返す
 
 func (p *Card) Notation() string {
-	return p.Rank + p.Suit
+	return p.rank.display + p.suit
 }
 
 func (p *Card) hasSameSuit(card Card) bool {
-	return p.Suit == card.Suit
+	return p.suit == card.suit
 }
 
 func (p *Card) hasSameRank(card Card) bool {
-	return p.Rank == card.Rank
+	return p.rank == card.rank
 }
 
 type Cards struct {
@@ -40,6 +63,9 @@ func (p *Cards) hand() Hand {
 	}
 	if p.Cards[0].hasSameSuit(p.Cards[1]) {
 		return Flush
+	}
+	if p.Cards[0].rank.display == "A" && p.Cards[1].rank.display == "2" {
+		return Straight
 	}
 	return HighCard
 }

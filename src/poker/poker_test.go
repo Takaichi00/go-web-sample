@@ -22,7 +22,7 @@ func Test_カードのsuitとrankを表示することができる(t *testing.T)
 
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
-			card := Card{Suit: tt.suit, Rank: tt.rank}
+			card := Card{suit: tt.suit, rank: ofRank(tt.rank)}
 			if card.Notation() != tt.want {
 				t.Errorf(`Card(1) is %q`, card)
 			}
@@ -49,8 +49,8 @@ func Test_カードが同じsuitを持つか判定できる(t *testing.T) {
 
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
-			card1 := Card{Suit: tt.suit1, Rank: tt.rank1}
-			card2 := Card{Suit: tt.suit2, Rank: tt.rank2}
+			card1 := Card{suit: tt.suit1, rank: ofRank(tt.rank1)}
+			card2 := Card{suit: tt.suit2, rank: ofRank(tt.rank2)}
 
 			if card1.hasSameSuit(card2) != tt.want {
 				t.Errorf(`Card(1) is %q, Card(2) is %q`, card1, card2)
@@ -78,8 +78,8 @@ func Test_カードが同じrankを持つか判定できる(t *testing.T) {
 
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
-			card1 := Card{Suit: tt.suit1, Rank: tt.rank1}
-			card2 := Card{Suit: tt.suit2, Rank: tt.rank2}
+			card1 := Card{suit: tt.suit1, rank: ofRank(tt.rank1)}
+			card2 := Card{suit: tt.suit2, rank: ofRank(tt.rank2)}
 
 			if card1.hasSameRank(card2) != tt.want {
 				t.Errorf(`Card(1) is %q, Card(2) is %q`, card1, card2)
@@ -93,9 +93,10 @@ func Test_ツーカードポーカーの役を判定できる(t *testing.T) {
 		cards []Card
 		want  Hand
 	}{
-		{cards: []Card{Card{"♥", "A"}, Card{"♠", "A"}}, want: Pair},
-		{cards: []Card{Card{"♥", "A"}, Card{"♥", "J"}}, want: Flush},
-		{cards: []Card{Card{"♥", "A"}, Card{"♠", "J"}}, want: HighCard},
+		{cards: []Card{Card{"♥", ofRank("A")}, Card{"♠", ofRank("A")}}, want: Pair},
+		{cards: []Card{Card{"♥", ofRank("A")}, Card{"♥", ofRank("J")}}, want: Flush},
+		{cards: []Card{Card{"♥", ofRank("A")}, Card{"♠", ofRank("J")}}, want: HighCard},
+		{cards: []Card{Card{"♥", ofRank("A")}, Card{"♠", ofRank("2")}}, want: Straight},
 	}
 
 	for _, tt := range tests {
