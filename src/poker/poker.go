@@ -1,6 +1,9 @@
 package poker
 
-import "strconv"
+import (
+	"math"
+	"strconv"
+)
 
 type Card struct {
 	suit string
@@ -64,7 +67,7 @@ func (p *Cards) hand() Hand {
 	if p.Cards[0].hasSameSuit(p.Cards[1]) {
 		return Flush
 	}
-	if p.Cards[0].rank.display == "A" && p.Cards[1].rank.display == "2" {
+	if math.Abs(float64(p.Cards[0].rank.number-p.Cards[1].rank.number)) == 1 {
 		return Straight
 	}
 	return HighCard
