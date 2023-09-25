@@ -67,8 +67,9 @@ func (p *Cards) hand() Hand {
 	if p.Cards[0].hasSameSuit(p.Cards[1]) {
 		return Flush
 	}
-	if math.Abs(float64(p.Cards[0].rank.number-p.Cards[1].rank.number)) == 1 {
+	if math.Abs(float64(p.Cards[0].rank.number-p.Cards[1].rank.number)) == 1 || math.Abs(float64(p.Cards[0].rank.number-p.Cards[1].rank.number)) == 12 {
 		return Straight
 	}
+
 	return HighCard
 }
