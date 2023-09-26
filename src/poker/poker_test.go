@@ -116,3 +116,33 @@ func Test_ツーカードポーカーの役を判定できる(t *testing.T) {
 		})
 	}
 }
+
+func Test_ツーカードポーカーの強さを比較できる(t *testing.T) {
+	tests := []struct {
+		cardsPlayer []Card
+		cardsEnemy  []Card
+		want        PokerResult
+	}{
+		{
+			cardsPlayer: []Card{Card{"♥", ofRank("A")}, Card{"♥", ofRank("3")}},
+			cardsEnemy:  []Card{Card{"♥", ofRank("A")}, Card{"♠", ofRank("3")}},
+			want:        WIN,
+		},
+	}
+
+	for _, tt := range tests {
+		tt := tt
+		name := fmt.Sprintf("want:%v", tt.want)
+
+		t.Run(name, func(t *testing.T) {
+			t.Parallel()
+
+			cardsPlayer := Cards{Cards: tt.cardsPlayer}
+			cardsEnemy := Cards{Cards: tt.cardsEnemy}
+
+			if cardsPlayer.battle(cardsEnemy) != tt.want {
+				t.Errorf(`cardsPlayer is %q, cardsPlayer is %q, want: %q, actual: %q`, cardsPlayer, cardsEnemy, tt.want, cardsPlayer.battle(cardsEnemy))
+			}
+		})
+	}
+}

@@ -81,3 +81,13 @@ func (p *Cards) hand() Hand {
 
 	return HighCard
 }
+
+type PokerResult string
+
+const (
+	WIN = PokerResult("WIN")
+)
+
+func (p *Cards) battle(enemy Cards) PokerResult {
+	return WIN
+}
