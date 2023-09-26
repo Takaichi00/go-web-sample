@@ -98,6 +98,7 @@ func Test_ツーカードポーカーの役を判定できる(t *testing.T) {
 		{cards: []Card{Card{"♥", ofRank("A")}, Card{"♠", ofRank("J")}}, want: HighCard},
 		{cards: []Card{Card{"♥", ofRank("A")}, Card{"♠", ofRank("2")}}, want: Straight},
 		{cards: []Card{Card{"♥", ofRank("K")}, Card{"♠", ofRank("A")}}, want: Straight},
+		{cards: []Card{Card{"♥", ofRank("A")}, Card{"♥", ofRank("2")}}, want: StraightFlush},
 	}
 
 	for _, tt := range tests {

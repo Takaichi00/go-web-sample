@@ -45,6 +45,10 @@ func (p *Card) hasSameRank(card Card) bool {
 	return p.rank == card.rank
 }
 
+func (p *Card) isStraight(card Card) bool {
+	return math.Abs(float64(p.rank.number-card.rank.number)) == 1 || math.Abs(float64(p.rank.number-card.rank.number)) == 12
+}
+
 type Cards struct {
 	Cards []Card
 }
@@ -54,20 +58,24 @@ type Cards struct {
 type Hand string
 
 const (
-	Pair     = Hand("Pair")
-	Flush    = Hand("Flush")
-	HighCard = Hand("High Card")
-	Straight = Hand("Straight")
+	Pair          = Hand("Pair")
+	Flush         = Hand("Flush")
+	HighCard      = Hand("High Card")
+	Straight      = Hand("Straight")
+	StraightFlush = Hand("Straight Flush")
 )
 
 func (p *Cards) hand() Hand {
 	if p.Cards[0].hasSameRank(p.Cards[1]) {
 		return Pair
 	}
+	if p.Cards[0].hasSameSuit(p.Cards[1]) && p.Cards[0].isStraight(p.Cards[1]) {
+		return StraightFlush
+	}
 	if p.Cards[0].hasSameSuit(p.Cards[1]) {
 		return Flush
 	}
-	if math.Abs(float64(p.Cards[0].rank.number-p.Cards[1].rank.number)) == 1 || math.Abs(float64(p.Cards[0].rank.number-p.Cards[1].rank.number)) == 12 {
+	if p.Cards[0].isStraight(p.Cards[1]) {
 		return Straight
 	}
 
