@@ -55,14 +55,14 @@ type Cards struct {
 
 // refer to: https://zenn.dev/kyoh86/articles/qiita-18b8bfc6ffe045aaf380
 
-type Hand string
+type Hand int
 
 const (
-	Pair          = Hand("Pair")
-	Flush         = Hand("Flush")
-	HighCard      = Hand("High Card")
-	Straight      = Hand("Straight")
-	StraightFlush = Hand("Straight Flush")
+	StraightFlush = Hand(5)
+	Pair          = Hand(4)
+	Straight      = Hand(3)
+	Flush         = Hand(2)
+	HighCard      = Hand(1)
 )
 
 func (p *Cards) hand() Hand {
@@ -85,9 +85,14 @@ func (p *Cards) hand() Hand {
 type PokerResult string
 
 const (
-	WIN = PokerResult("WIN")
+	WIN  = PokerResult("WIN")
+	DRAW = PokerResult("DRAW")
+	LOSE = PokerResult("WIN")
 )
 
 func (p *Cards) battle(enemy Cards) PokerResult {
-	return WIN
+	if p.hand() > enemy.hand() {
+		return WIN
+	}
+	return LOSE
 }
