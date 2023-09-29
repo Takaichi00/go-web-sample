@@ -94,5 +94,8 @@ func (p *Cards) battle(enemy Cards) PokerResult {
 	if p.hand() > enemy.hand() {
 		return WIN
 	}
-	return LOSE
+	if p.hand() < enemy.hand() {
+		return LOSE
+	}
+	return DRAW
 }

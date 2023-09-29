@@ -128,6 +128,16 @@ func Test_ツーカードポーカーの強さを比較できる(t *testing.T) {
 			cardsEnemy:  []Card{Card{"♥", ofRank("A")}, Card{"♠", ofRank("3")}},
 			want:        WIN,
 		},
+		{
+			cardsPlayer: []Card{Card{"♥", ofRank("A")}, Card{"♠", ofRank("3")}},
+			cardsEnemy:  []Card{Card{"♥", ofRank("A")}, Card{"♥", ofRank("3")}},
+			want:        LOSE,
+		},
+		{
+			cardsPlayer: []Card{Card{"♥", ofRank("A")}, Card{"♠", ofRank("3")}},
+			cardsEnemy:  []Card{Card{"♥", ofRank("K")}, Card{"♦︎", ofRank("3")}},
+			want:        DRAW,
+		},
 	}
 
 	for _, tt := range tests {
