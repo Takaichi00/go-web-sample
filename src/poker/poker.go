@@ -97,5 +97,8 @@ func (p *Cards) battle(enemy Cards) PokerResult {
 	if p.hand() < enemy.hand() {
 		return LOSE
 	}
+	// 一番強いランクを取得して比較
+	// 二番目に強いランクを取得して比較
+
 	return DRAW
 }
