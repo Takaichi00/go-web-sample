@@ -139,17 +139,11 @@ func Test_ツーカードポーカーの強さを比較できる(t *testing.T) {
 			want:        WIN,
 		},
 
-		//{
-		//	cardsPlayer: []Card{Card{"♥", ofRank("A")}, Card{"♦", ofRank("3")}},
-		//	cardsEnemy:  []Card{Card{"♠", ofRank("A")}, Card{"♥", ofRank("4")}},
-		//	want:        LOSE,
-		//},
-		//
-		//{
-		//	cardsPlayer: []Card{Card{"♥", ofRank("A")}, Card{"♦", ofRank("3")}},
-		//	cardsEnemy:  []Card{Card{"♠", ofRank("A")}, Card{"♥", ofRank("3")}},
-		//	want:        DRAW,
-		//},
+		{
+			cardsPlayer: []Card{Card{"♥", ofRank("K")}, Card{"♠", ofRank("3")}},
+			cardsEnemy:  []Card{Card{"♥", ofRank("A")}, Card{"♦︎", ofRank("3")}},
+			want:        LOSE,
+		},
 	}
 
 	for _, tt := range tests {
@@ -163,7 +157,7 @@ func Test_ツーカードポーカーの強さを比較できる(t *testing.T) {
 			cardsEnemy := Cards{Cards: tt.cardsEnemy}
 
 			if cardsPlayer.battle(cardsEnemy) != tt.want {
-				t.Errorf(`cardsPlayer is %q, cardsPlayer is %q, want: %q, actual: %q`, cardsPlayer, cardsEnemy, tt.want, cardsPlayer.battle(cardsEnemy))
+				t.Errorf(`cardsPlayer is %q, cardsEnemy is %q, want: %q, actual: %q`, cardsPlayer, cardsEnemy, tt.want, cardsPlayer.battle(cardsEnemy))
 			}
 		})
 	}

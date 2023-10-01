@@ -11,8 +11,9 @@ type Card struct {
 }
 
 type Rank struct {
-	number  int
-	display string
+	number   int
+	strength int
+	display  string
 }
 
 func ofRank(rankString string) Rank {
@@ -28,7 +29,11 @@ func ofRank(rankString string) Rank {
 	} else {
 		i, _ = strconv.Atoi(rankString)
 	}
-	return Rank{number: i, display: rankString}
+	strength := i - 1
+	if rankString == "A" {
+		strength = 13
+	}
+	return Rank{number: i, strength: strength, display: rankString}
 }
 
 // TODO rank を内部的には数字で持ち、不正な値だった場合はエラーを返す
@@ -98,7 +103,28 @@ func (p *Cards) battle(enemy Cards) PokerResult {
 		return LOSE
 	}
 	// 一番強いランクを取得して比較
-	// 二番目に強いランクを取得して比較
+	playlerMaxRank := p.Cards[0].rank
+	for _, card := range p.Cards {
+		if card.rank.strength > playlerMaxRank.strength {
+			playlerMaxRank = card.rank
+		}
+	}
 
+	enemyMaxRank := enemy.Cards[0].rank
+	for _, card := range enemy.Cards {
+		if card.rank.strength > enemyMaxRank.strength {
+			enemyMaxRank = card.rank
+		}
+	}
+
+	if playlerMaxRank.strength > enemyMaxRank.strength {
+		return WIN
+	}
+
+	if playlerMaxRank.number < enemyMaxRank.number {
+		return LOSE
+	}
+	//
+	//// 二番目に強いランクを取得して比較
 	return DRAW
 }
