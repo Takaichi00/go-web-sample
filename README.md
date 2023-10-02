@@ -22,3 +22,7 @@ $ go run example.go
 ```
 $ curl -v localhost:8080/ping
 ```
+
+# Reference
+* [samber/lo: 💥 A Lodash-style Go library based on Go 1.18+ Generics (map, filter, contains, find...)](https://github.com/samber/lo)
+  * max(), min(), map() ...
