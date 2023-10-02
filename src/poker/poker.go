@@ -1,6 +1,7 @@
 package poker
 
 import (
+	"github.com/samber/lo"
 	"math"
 	"strconv"
 )
@@ -103,28 +104,22 @@ func (p *Cards) battle(enemy Cards) PokerResult {
 		return LOSE
 	}
 	// 一番強いランクを取得して比較
-	playlerMaxRank := p.Cards[0].rank
-	for _, card := range p.Cards {
-		if card.rank.strength > playlerMaxRank.strength {
-			playlerMaxRank = card.rank
-		}
-	}
+	playerMaxRankCard := lo.MaxBy(p.Cards, func(card Card, max Card) bool {
+		return card.rank.strength > max.rank.strength
+	})
 
-	enemyMaxRank := enemy.Cards[0].rank
-	for _, card := range enemy.Cards {
-		if card.rank.strength > enemyMaxRank.strength {
-			enemyMaxRank = card.rank
-		}
-	}
+	enemyMaxRankCard := lo.MaxBy(enemy.Cards, func(card Card, max Card) bool {
+		return card.rank.strength > max.rank.strength
+	})
 
-	if playlerMaxRank.strength > enemyMaxRank.strength {
+	if playerMaxRankCard.rank.strength > enemyMaxRankCard.rank.strength {
 		return WIN
 	}
 
-	if playlerMaxRank.number < enemyMaxRank.number {
+	if playerMaxRankCard.rank.strength < enemyMaxRankCard.rank.strength {
 		return LOSE
 	}
-	//
-	//// 二番目に強いランクを取得して比較
+
+	// 二番目に強いランクを取得して比較
 	return DRAW
 }
