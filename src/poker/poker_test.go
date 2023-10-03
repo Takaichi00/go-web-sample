@@ -119,27 +119,32 @@ func Test_ツーカードポーカーの役を判定できる(t *testing.T) {
 
 func Test_ツーカードポーカーの強さを比較できる(t *testing.T) {
 	tests := []struct {
+		testName    string
 		cardsPlayer []Card
 		cardsEnemy  []Card
 		want        PokerResult
 	}{
 		{
+			testName:    "自分: フラッシュ / 敵: ハイカード だった場合は自分が勝つ",
 			cardsPlayer: []Card{Card{"♥", ofRank("A")}, Card{"♥", ofRank("3")}},
 			cardsEnemy:  []Card{Card{"♥", ofRank("A")}, Card{"♠", ofRank("3")}},
 			want:        WIN,
 		},
 		{
+			testName:    "自分: ハイカード / 敵: フラッシュ だった場合は敵が勝つ",
 			cardsPlayer: []Card{Card{"♥", ofRank("A")}, Card{"♠", ofRank("3")}},
 			cardsEnemy:  []Card{Card{"♥", ofRank("A")}, Card{"♥", ofRank("3")}},
 			want:        LOSE,
 		},
 		{
+			testName:    "自分: ハイカード, max-A / 敵: ハイカード, max-K だった場合は自分が勝つ",
 			cardsPlayer: []Card{Card{"♥", ofRank("A")}, Card{"♠", ofRank("3")}},
 			cardsEnemy:  []Card{Card{"♥", ofRank("K")}, Card{"♦︎", ofRank("3")}},
 			want:        WIN,
 		},
 
 		{
+			testName:    "自分: ハイカード, max-K / 敵: ハイカード, max-A だった場合は敵が勝つ",
 			cardsPlayer: []Card{Card{"♥", ofRank("K")}, Card{"♠", ofRank("3")}},
 			cardsEnemy:  []Card{Card{"♥", ofRank("A")}, Card{"♦︎", ofRank("3")}},
 			want:        LOSE,
@@ -148,7 +153,7 @@ func Test_ツーカードポーカーの強さを比較できる(t *testing.T) {
 
 	for _, tt := range tests {
 		tt := tt
-		name := fmt.Sprintf("want:%v", tt.want)
+		name := fmt.Sprintf("want:%v", tt.testName)
 
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
