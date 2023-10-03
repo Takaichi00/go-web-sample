@@ -142,27 +142,39 @@ func Test_ツーカードポーカーの強さを比較できる(t *testing.T) {
 			cardsEnemy:  []Card{Card{"♥", ofRank("K")}, Card{"♦︎", ofRank("3")}},
 			want:        WIN,
 		},
-
 		{
 			testName:    "自分: ハイカード, max-K / 敵: ハイカード, max-A だった場合は敵が勝つ",
 			cardsPlayer: []Card{Card{"♥", ofRank("K")}, Card{"♠", ofRank("3")}},
 			cardsEnemy:  []Card{Card{"♥", ofRank("A")}, Card{"♦︎", ofRank("3")}},
 			want:        LOSE,
 		},
+		{
+			testName:    "自分: ハイカード, max-A, 2nd max-K / 敵: ハイカード, max-A, 2nd max-Q だった場合は自分が勝つ",
+			cardsPlayer: []Card{Card{"♥", ofRank("A")}, Card{"♠", ofRank("K")}},
+			cardsEnemy:  []Card{Card{"♥", ofRank("A")}, Card{"♦︎", ofRank("Q")}},
+			want:        WIN,
+		},
+		{
+			testName:    "自分: ハイカード, max-A, 2nd max-Q / 敵: ハイカード, max-A, 2nd max-K だった場合は相手が勝つ",
+			cardsPlayer: []Card{Card{"♥", ofRank("A")}, Card{"♠", ofRank("Q")}},
+			cardsEnemy:  []Card{Card{"♥", ofRank("A")}, Card{"♦︎", ofRank("K")}},
+			want:        LOSE,
+		},
 	}
 
 	for _, tt := range tests {
 		tt := tt
-		name := fmt.Sprintf("want:%v", tt.testName)
+		name := fmt.Sprintf("%v", tt.testName)
 
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
 
 			cardsPlayer := Cards{Cards: tt.cardsPlayer}
 			cardsEnemy := Cards{Cards: tt.cardsEnemy}
+			result := cardsPlayer.battle(cardsEnemy)
 
-			if cardsPlayer.battle(cardsEnemy) != tt.want {
-				t.Errorf(`cardsPlayer is %q, cardsEnemy is %q, want: %q, actual: %q`, cardsPlayer, cardsEnemy, tt.want, cardsPlayer.battle(cardsEnemy))
+			if result != tt.want {
+				t.Errorf(`cardsPlayer is %q, cardsEnemy is %q, want: %q, actual: %q`, cardsPlayer, cardsEnemy, tt.want, result)
 			}
 		})
 	}

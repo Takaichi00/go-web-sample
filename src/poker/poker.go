@@ -93,7 +93,7 @@ type PokerResult string
 const (
 	WIN  = PokerResult("WIN")
 	DRAW = PokerResult("DRAW")
-	LOSE = PokerResult("WIN")
+	LOSE = PokerResult("LOSE")
 )
 
 func (p *Cards) battle(enemy Cards) PokerResult {
@@ -121,5 +121,25 @@ func (p *Cards) battle(enemy Cards) PokerResult {
 	}
 
 	// 二番目に強いランクを取得して比較
+	playerSecondMaxRankCard := lo.MaxBy(lo.Filter(p.Cards, func(card Card, index int) bool {
+		return card != playerMaxRankCard
+	}), func(card Card, max Card) bool {
+		return card.rank.strength > max.rank.strength
+	})
+
+	enemySecondMaxRankCard := lo.MaxBy(lo.Filter(enemy.Cards, func(card Card, index int) bool {
+		return card != enemyMaxRankCard
+	}), func(card Card, max Card) bool {
+		return card.rank.strength > max.rank.strength
+	})
+
+	if playerSecondMaxRankCard.rank.strength > enemySecondMaxRankCard.rank.strength {
+		return WIN
+	}
+
+	if playerSecondMaxRankCard.rank.strength < enemySecondMaxRankCard.rank.strength {
+		return LOSE
+	}
+
 	return DRAW
 }
