@@ -160,6 +160,42 @@ func Test_ツーカードポーカーの強さを比較できる(t *testing.T) {
 			cardsEnemy:  []Card{Card{"♥", ofRank("A")}, Card{"♦︎", ofRank("K")}},
 			want:        LOSE,
 		},
+		{
+			testName:    "自分: フラッシュ, max-A / 敵: フラッシュ, max-K だった場合は自分が勝つ",
+			cardsPlayer: []Card{Card{"♥", ofRank("A")}, Card{"♥", ofRank("K")}},
+			cardsEnemy:  []Card{Card{"♦", ofRank("K")}, Card{"♦︎", ofRank("Q")}},
+			want:        WIN,
+		},
+		{
+			testName:    "自分: フラッシュ, max-A, 2nd max-Q / 敵: フラッシュ, max-A, 2nd max-K だった場合は相手が勝つ",
+			cardsPlayer: []Card{Card{"♥", ofRank("A")}, Card{"♥", ofRank("Q")}},
+			cardsEnemy:  []Card{Card{"♦", ofRank("A")}, Card{"♦︎", ofRank("K")}},
+			want:        LOSE,
+		},
+		{
+			testName:    "自分: ストレート, A-K / 敵: ストレート, K-Q だった場合は自分が勝つ",
+			cardsPlayer: []Card{Card{"♥", ofRank("K")}, Card{"♠", ofRank("A")}},
+			cardsEnemy:  []Card{Card{"♦", ofRank("K")}, Card{"♠", ofRank("Q")}},
+			want:        WIN,
+		},
+		{
+			testName:    "自分: ストレート, A-K / 敵: ストレート, 2-A だった場合は自分が勝つ",
+			cardsPlayer: []Card{Card{"♥", ofRank("A")}, Card{"♠", ofRank("K")}},
+			cardsEnemy:  []Card{Card{"♦", ofRank("A")}, Card{"♠", ofRank("2")}},
+			want:        WIN,
+		},
+		{
+			testName:    "自分: ペア, K-K / 敵: ペア, A-A だった場合は相手が勝つ",
+			cardsPlayer: []Card{Card{"♥", ofRank("K")}, Card{"♠", ofRank("K")}},
+			cardsEnemy:  []Card{Card{"♦", ofRank("A")}, Card{"♠", ofRank("A")}},
+			want:        LOSE,
+		},
+		{
+			testName:    "自分: ストレートフラッシュ, A-K / 敵: ペア, A-2 だった場合は自分が勝つ",
+			cardsPlayer: []Card{Card{"♥", ofRank("A")}, Card{"♥", ofRank("K")}},
+			cardsEnemy:  []Card{Card{"♦", ofRank("A")}, Card{"♦", ofRank("2")}},
+			want:        WIN,
+		},
 	}
 
 	for _, tt := range tests {
