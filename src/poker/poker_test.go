@@ -5,6 +5,14 @@ import (
 	"testing"
 )
 
+// Go には Rust の unwrap のような機能は無いので自前で作成する.
+func unwrap[T any](value T, err error) T {
+	if err != nil {
+		panic(err)
+	}
+	return value
+}
+
 func Test_カードのsuitとrankを表示することができる(t *testing.T) {
 
 	tests := []struct {
@@ -22,12 +30,18 @@ func Test_カードのsuitとrankを表示することができる(t *testing.T)
 
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
-			card := Card{suit: tt.suit, rank: ofRank(tt.rank)}
+
+			card := Card{suit: tt.suit, rank: unwrap(ofRank(tt.rank))}
+
 			if card.Notation() != tt.want {
 				t.Errorf(`Card(1) is %q`, card)
 			}
 		})
 	}
+}
+
+func Test_存在しないランクを指定するとエラーになる(t *testing.T) {
+
 }
 
 func Test_カードが同じsuitを持つか判定できる(t *testing.T) {
@@ -49,8 +63,8 @@ func Test_カードが同じsuitを持つか判定できる(t *testing.T) {
 
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
-			card1 := Card{suit: tt.suit1, rank: ofRank(tt.rank1)}
-			card2 := Card{suit: tt.suit2, rank: ofRank(tt.rank2)}
+			card1 := Card{suit: tt.suit1, rank: unwrap(ofRank(tt.rank1))}
+			card2 := Card{suit: tt.suit2, rank: unwrap(ofRank(tt.rank2))}
 
 			if card1.hasSameSuit(card2) != tt.want {
 				t.Errorf(`Card(1) is %q, Card(2) is %q`, card1, card2)
@@ -78,8 +92,13 @@ func Test_カードが同じrankを持つか判定できる(t *testing.T) {
 
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
-			card1 := Card{suit: tt.suit1, rank: ofRank(tt.rank1)}
-			card2 := Card{suit: tt.suit2, rank: ofRank(tt.rank2)}
+			var rank1 Rank
+			var rank2 Rank
+			rank1, _ = ofRank(tt.rank1)
+			rank2, _ = ofRank(tt.rank2)
+
+			card1 := Card{suit: tt.suit1, rank: rank1}
+			card2 := Card{suit: tt.suit2, rank: rank2}
 
 			if card1.hasSameRank(card2) != tt.want {
 				t.Errorf(`Card(1) is %q, Card(2) is %q`, card1, card2)
@@ -93,12 +112,12 @@ func Test_ツーカードポーカーの役を判定できる(t *testing.T) {
 		cards []Card
 		want  Hand
 	}{
-		{cards: []Card{Card{"♥", ofRank("A")}, Card{"♠", ofRank("A")}}, want: Pair},
-		{cards: []Card{Card{"♥", ofRank("A")}, Card{"♥", ofRank("J")}}, want: Flush},
-		{cards: []Card{Card{"♥", ofRank("A")}, Card{"♠", ofRank("J")}}, want: HighCard},
-		{cards: []Card{Card{"♥", ofRank("A")}, Card{"♠", ofRank("2")}}, want: Straight},
-		{cards: []Card{Card{"♥", ofRank("K")}, Card{"♠", ofRank("A")}}, want: Straight},
-		{cards: []Card{Card{"♥", ofRank("A")}, Card{"♥", ofRank("2")}}, want: StraightFlush},
+		{cards: []Card{Card{"♥", unwrap(ofRank("A"))}, Card{"♠", unwrap(ofRank("A"))}}, want: Pair},
+		{cards: []Card{Card{"♥", unwrap(ofRank("A"))}, Card{"♥", unwrap(ofRank("J"))}}, want: Flush},
+		{cards: []Card{Card{"♥", unwrap(ofRank("A"))}, Card{"♠", unwrap(ofRank("J"))}}, want: HighCard},
+		{cards: []Card{Card{"♥", unwrap(ofRank("A"))}, Card{"♠", unwrap(ofRank("2"))}}, want: Straight},
+		{cards: []Card{Card{"♥", unwrap(ofRank("K"))}, Card{"♠", unwrap(ofRank("A"))}}, want: Straight},
+		{cards: []Card{Card{"♥", unwrap(ofRank("A"))}, Card{"♥", unwrap(ofRank("2"))}}, want: StraightFlush},
 	}
 
 	for _, tt := range tests {
@@ -126,74 +145,74 @@ func Test_ツーカードポーカーの強さを比較できる(t *testing.T) {
 	}{
 		{
 			testName:    "自分: フラッシュ / 敵: ハイカード だった場合は自分が勝つ",
-			cardsPlayer: []Card{Card{"♥", ofRank("A")}, Card{"♥", ofRank("3")}},
-			cardsEnemy:  []Card{Card{"♥", ofRank("A")}, Card{"♠", ofRank("3")}},
+			cardsPlayer: []Card{Card{"♥", unwrap(ofRank("A"))}, Card{"♥", unwrap(ofRank("3"))}},
+			cardsEnemy:  []Card{Card{"♥", unwrap(ofRank("A"))}, Card{"♠", unwrap(ofRank("3"))}},
 			want:        WIN,
 		},
 		{
 			testName:    "自分: ハイカード / 敵: フラッシュ だった場合は敵が勝つ",
-			cardsPlayer: []Card{Card{"♥", ofRank("A")}, Card{"♠", ofRank("3")}},
-			cardsEnemy:  []Card{Card{"♥", ofRank("A")}, Card{"♥", ofRank("3")}},
+			cardsPlayer: []Card{Card{"♥", unwrap(ofRank("A"))}, Card{"♠", unwrap(ofRank("3"))}},
+			cardsEnemy:  []Card{Card{"♥", unwrap(ofRank("A"))}, Card{"♥", unwrap(ofRank("3"))}},
 			want:        LOSE,
 		},
 		{
 			testName:    "自分: ハイカード, max-A / 敵: ハイカード, max-K だった場合は自分が勝つ",
-			cardsPlayer: []Card{Card{"♥", ofRank("A")}, Card{"♠", ofRank("3")}},
-			cardsEnemy:  []Card{Card{"♥", ofRank("K")}, Card{"♦︎", ofRank("3")}},
+			cardsPlayer: []Card{Card{"♥", unwrap(ofRank("A"))}, Card{"♠", unwrap(ofRank("3"))}},
+			cardsEnemy:  []Card{Card{"♥", unwrap(ofRank("K"))}, Card{"♦︎", unwrap(ofRank("3"))}},
 			want:        WIN,
 		},
 		{
 			testName:    "自分: ハイカード, max-K / 敵: ハイカード, max-A だった場合は敵が勝つ",
-			cardsPlayer: []Card{Card{"♥", ofRank("K")}, Card{"♠", ofRank("3")}},
-			cardsEnemy:  []Card{Card{"♥", ofRank("A")}, Card{"♦︎", ofRank("3")}},
+			cardsPlayer: []Card{Card{"♥", unwrap(ofRank("K"))}, Card{"♠", unwrap(ofRank("3"))}},
+			cardsEnemy:  []Card{Card{"♥", unwrap(ofRank("A"))}, Card{"♦︎", unwrap(ofRank("3"))}},
 			want:        LOSE,
 		},
 		{
 			testName:    "自分: ハイカード, max-A, 2nd max-K / 敵: ハイカード, max-A, 2nd max-Q だった場合は自分が勝つ",
-			cardsPlayer: []Card{Card{"♥", ofRank("A")}, Card{"♠", ofRank("K")}},
-			cardsEnemy:  []Card{Card{"♥", ofRank("A")}, Card{"♦︎", ofRank("Q")}},
+			cardsPlayer: []Card{Card{"♥", unwrap(ofRank("A"))}, Card{"♠", unwrap(ofRank("K"))}},
+			cardsEnemy:  []Card{Card{"♥", unwrap(ofRank("A"))}, Card{"♦︎", unwrap(ofRank("Q"))}},
 			want:        WIN,
 		},
 		{
 			testName:    "自分: ハイカード, max-A, 2nd max-Q / 敵: ハイカード, max-A, 2nd max-K だった場合は相手が勝つ",
-			cardsPlayer: []Card{Card{"♥", ofRank("A")}, Card{"♠", ofRank("Q")}},
-			cardsEnemy:  []Card{Card{"♥", ofRank("A")}, Card{"♦︎", ofRank("K")}},
+			cardsPlayer: []Card{Card{"♥", unwrap(ofRank("A"))}, Card{"♠", unwrap(ofRank("Q"))}},
+			cardsEnemy:  []Card{Card{"♥", unwrap(ofRank("A"))}, Card{"♦︎", unwrap(ofRank("K"))}},
 			want:        LOSE,
 		},
 		{
 			testName:    "自分: フラッシュ, max-A / 敵: フラッシュ, max-K だった場合は自分が勝つ",
-			cardsPlayer: []Card{Card{"♥", ofRank("A")}, Card{"♥", ofRank("K")}},
-			cardsEnemy:  []Card{Card{"♦", ofRank("K")}, Card{"♦︎", ofRank("Q")}},
+			cardsPlayer: []Card{Card{"♥", unwrap(ofRank("A"))}, Card{"♥", unwrap(ofRank("K"))}},
+			cardsEnemy:  []Card{Card{"♦", unwrap(ofRank("K"))}, Card{"♦︎", unwrap(ofRank("Q"))}},
 			want:        WIN,
 		},
 		{
 			testName:    "自分: フラッシュ, max-A, 2nd max-Q / 敵: フラッシュ, max-A, 2nd max-K だった場合は相手が勝つ",
-			cardsPlayer: []Card{Card{"♥", ofRank("A")}, Card{"♥", ofRank("Q")}},
-			cardsEnemy:  []Card{Card{"♦", ofRank("A")}, Card{"♦︎", ofRank("K")}},
+			cardsPlayer: []Card{Card{"♥", unwrap(ofRank("A"))}, Card{"♥", unwrap(ofRank("Q"))}},
+			cardsEnemy:  []Card{Card{"♦", unwrap(ofRank("A"))}, Card{"♦︎", unwrap(ofRank("K"))}},
 			want:        LOSE,
 		},
 		{
 			testName:    "自分: ストレート, A-K / 敵: ストレート, K-Q だった場合は自分が勝つ",
-			cardsPlayer: []Card{Card{"♥", ofRank("K")}, Card{"♠", ofRank("A")}},
-			cardsEnemy:  []Card{Card{"♦", ofRank("K")}, Card{"♠", ofRank("Q")}},
+			cardsPlayer: []Card{Card{"♥", unwrap(ofRank("K"))}, Card{"♠", unwrap(ofRank("A"))}},
+			cardsEnemy:  []Card{Card{"♦", unwrap(ofRank("K"))}, Card{"♠", unwrap(ofRank("Q"))}},
 			want:        WIN,
 		},
 		{
 			testName:    "自分: ストレート, A-K / 敵: ストレート, 2-A だった場合は自分が勝つ",
-			cardsPlayer: []Card{Card{"♥", ofRank("A")}, Card{"♠", ofRank("K")}},
-			cardsEnemy:  []Card{Card{"♦", ofRank("A")}, Card{"♠", ofRank("2")}},
+			cardsPlayer: []Card{Card{"♥", unwrap(ofRank("A"))}, Card{"♠", unwrap(ofRank("K"))}},
+			cardsEnemy:  []Card{Card{"♦", unwrap(ofRank("A"))}, Card{"♠", unwrap(ofRank("2"))}},
 			want:        WIN,
 		},
 		{
 			testName:    "自分: ペア, K-K / 敵: ペア, A-A だった場合は相手が勝つ",
-			cardsPlayer: []Card{Card{"♥", ofRank("K")}, Card{"♠", ofRank("K")}},
-			cardsEnemy:  []Card{Card{"♦", ofRank("A")}, Card{"♠", ofRank("A")}},
+			cardsPlayer: []Card{Card{"♥", unwrap(ofRank("K"))}, Card{"♠", unwrap(ofRank("K"))}},
+			cardsEnemy:  []Card{Card{"♦", unwrap(ofRank("A"))}, Card{"♠", unwrap(ofRank("A"))}},
 			want:        LOSE,
 		},
 		{
-			testName:    "自分: ストレートフラッシュ, A-K / 敵: ペア, A-2 だった場合は自分が勝つ",
-			cardsPlayer: []Card{Card{"♥", ofRank("A")}, Card{"♥", ofRank("K")}},
-			cardsEnemy:  []Card{Card{"♦", ofRank("A")}, Card{"♦", ofRank("2")}},
+			testName:    "自分: ストレートフラッシュ, A-K / 敵: ストレートフラッシュ, A-2 だった場合は自分が勝つ",
+			cardsPlayer: []Card{Card{"♥", unwrap(ofRank("A"))}, Card{"♥", unwrap(ofRank("K"))}},
+			cardsEnemy:  []Card{Card{"♦", unwrap(ofRank("A"))}, Card{"♦", unwrap(ofRank("2"))}},
 			want:        WIN,
 		},
 	}

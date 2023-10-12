@@ -7,6 +7,7 @@ import (
 )
 
 type Card struct {
+	// TODO: Suit の値オブジェクトを作る
 	suit string
 	rank Rank
 }
@@ -17,7 +18,8 @@ type Rank struct {
 	display  string
 }
 
-func ofRank(rankString string) Rank {
+// TODO: エラーハンドリングをする
+func ofRank(rankString string) (Rank, error) {
 	var i int
 	if rankString == "A" {
 		i = 1
@@ -34,7 +36,7 @@ func ofRank(rankString string) Rank {
 	if rankString == "A" {
 		strength = 13
 	}
-	return Rank{number: i, strength: strength, display: rankString}
+	return Rank{number: i, strength: strength, display: rankString}, nil
 }
 
 // TODO rank を内部的には数字で持ち、不正な値だった場合はエラーを返す
