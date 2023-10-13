@@ -1,6 +1,8 @@
 package poker
 
 import (
+	"errors"
+	"fmt"
 	"github.com/samber/lo"
 	"math"
 	"strconv"
@@ -30,7 +32,14 @@ func ofRank(rankString string) (Rank, error) {
 	} else if rankString == "K" {
 		i = 13
 	} else {
-		i, _ = strconv.Atoi(rankString)
+		var err error
+		i, err = strconv.Atoi(rankString)
+		if err != nil {
+			return Rank{}, fmt.Errorf("failed to parse rank string: %w", err)
+		}
+		if i < 2 || i > 10 {
+			return Rank{}, errors.New("rank number out of range")
+		}
 	}
 	strength := i - 1
 	if rankString == "A" {

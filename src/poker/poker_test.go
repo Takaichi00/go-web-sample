@@ -2,6 +2,7 @@ package poker
 
 import (
 	"fmt"
+	"strings"
 	"testing"
 )
 
@@ -41,6 +42,35 @@ func Test_カードのsuitとrankを表示することができる(t *testing.T)
 }
 
 func Test_存在しないランクを指定するとエラーになる(t *testing.T) {
+	tests := []struct {
+		suit string
+		rank string
+		want string
+	}{
+		{rank: "B", want: "failed to parse rank string:"},
+	}
+
+	for _, tt := range tests {
+		tt := tt
+		name := fmt.Sprintf("want:%v", tt.want)
+
+		t.Run(name, func(t *testing.T) {
+			t.Parallel()
+
+			var err error
+			_, err = ofRank(tt.rank)
+
+			println(err.Error())
+
+			if err == nil {
+				t.Errorf(`Error did not occurred. rank_string: %q`, tt.rank)
+			}
+
+			if !strings.HasPrefix(err.Error(), tt.want) {
+				t.Errorf(`Unexpected error: %q`, err.Error())
+			}
+		})
+	}
 
 }
 
