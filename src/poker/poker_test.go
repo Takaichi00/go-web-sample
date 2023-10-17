@@ -32,7 +32,7 @@ func Test_カードのsuitとrankを表示することができる(t *testing.T)
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
 
-			card := Card{suit: tt.suit, rank: unwrap(ofRank(tt.rank))}
+			card := Card{suit: unwrap(ofSuit(tt.suit)), rank: unwrap(ofRank(tt.rank))}
 
 			if card.Notation() != tt.want {
 				t.Errorf(`Card(1) is %q`, card)
@@ -43,7 +43,6 @@ func Test_カードのsuitとrankを表示することができる(t *testing.T)
 
 func Test_存在しないランクを指定するとエラーになる(t *testing.T) {
 	tests := []struct {
-		suit string
 		rank string
 		want string
 	}{
@@ -74,6 +73,38 @@ func Test_存在しないランクを指定するとエラーになる(t *testin
 
 }
 
+func Test_存在しないスートを指定するとエラーになる(t *testing.T) {
+	tests := []struct {
+		suit string
+		want string
+	}{
+		{suit: "hoge", want: "failed to parse suit string"},
+	}
+
+	for _, tt := range tests {
+		tt := tt
+		name := fmt.Sprintf("want:%v", tt.want)
+
+		t.Run(name, func(t *testing.T) {
+			t.Parallel()
+
+			var err error
+			_, err = ofSuit(tt.suit)
+
+			println(err.Error())
+
+			if err == nil {
+				t.Errorf(`Error did not occurred. rank_string: %q`, tt.suit)
+			}
+
+			if !strings.HasPrefix(err.Error(), tt.want) {
+				t.Errorf(`Unexpected error: %q`, err.Error())
+			}
+		})
+	}
+
+}
+
 func Test_カードが同じsuitを持つか判定できる(t *testing.T) {
 
 	tests := []struct {
@@ -93,8 +124,8 @@ func Test_カードが同じsuitを持つか判定できる(t *testing.T) {
 
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
-			card1 := Card{suit: tt.suit1, rank: unwrap(ofRank(tt.rank1))}
-			card2 := Card{suit: tt.suit2, rank: unwrap(ofRank(tt.rank2))}
+			card1 := Card{suit: unwrap(ofSuit(tt.suit1)), rank: unwrap(ofRank(tt.rank1))}
+			card2 := Card{suit: unwrap(ofSuit(tt.suit2)), rank: unwrap(ofRank(tt.rank2))}
 
 			if card1.hasSameSuit(card2) != tt.want {
 				t.Errorf(`Card(1) is %q, Card(2) is %q`, card1, card2)
@@ -127,8 +158,8 @@ func Test_カードが同じrankを持つか判定できる(t *testing.T) {
 			rank1, _ = ofRank(tt.rank1)
 			rank2, _ = ofRank(tt.rank2)
 
-			card1 := Card{suit: tt.suit1, rank: rank1}
-			card2 := Card{suit: tt.suit2, rank: rank2}
+			card1 := Card{suit: unwrap(ofSuit(tt.suit1)), rank: rank1}
+			card2 := Card{suit: unwrap(ofSuit(tt.suit2)), rank: rank2}
 
 			if card1.hasSameRank(card2) != tt.want {
 				t.Errorf(`Card(1) is %q, Card(2) is %q`, card1, card2)

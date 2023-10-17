@@ -9,9 +9,33 @@ import (
 )
 
 type Card struct {
-	// TODO: Suit の値オブジェクトを作る
-	suit string
+	suit Suit
 	rank Rank
+}
+
+type Suit string
+
+const (
+	SPADE   = Suit("♠")
+	HEART   = Suit("♥")
+	DIAMOND = Suit("♦")
+	CLUB    = Suit("♣")
+)
+
+func ofSuit(suitString string) (Suit, error) {
+	if suitString == "♠" {
+		return SPADE, nil
+	}
+	if suitString == "♥" {
+		return HEART, nil
+	}
+	if suitString == "♦" {
+		return DIAMOND, nil
+	}
+	if suitString == "♣" {
+		return CLUB, nil
+	}
+	return "", errors.New("failed to parse suit string")
 }
 
 type Rank struct {
@@ -20,7 +44,6 @@ type Rank struct {
 	display  string
 }
 
-// TODO: エラーハンドリングをする
 func ofRank(rankString string) (Rank, error) {
 	var i int
 	if rankString == "A" {
@@ -48,10 +71,8 @@ func ofRank(rankString string) (Rank, error) {
 	return Rank{number: i, strength: strength, display: rankString}, nil
 }
 
-// TODO rank を内部的には数字で持ち、不正な値だった場合はエラーを返す
-
 func (p *Card) Notation() string {
-	return p.rank.display + p.suit
+	return p.rank.display + string(p.suit)
 }
 
 func (p *Card) hasSameSuit(card Card) bool {
