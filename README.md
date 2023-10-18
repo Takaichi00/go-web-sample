@@ -26,3 +26,7 @@ $ curl -v localhost:8080/ping
 # Reference
 * [samber/lo: 💥 A Lodash-style Go library based on Go 1.18+ Generics (map, filter, contains, find...)](https://github.com/samber/lo)
   * max(), min(), map() ...
+
+## DDD / Onion Architecture (オニオンアーキテクチャ)
+* [yu-croco/ddd_on_golang_sample: Golang（Gin）を使い、なんちゃってモンハンの世界をDomain-Driven Designで実装している](https://github.com/yu-croco/ddd_on_golang_sample)
+* [今すぐ「レイヤードアーキテクチャ+DDD」を理解しよう。（golang） #Go - Qiita](https://qiita.com/tono-maron/items/345c433b86f74d314c8d)
